@@ -27,7 +27,7 @@ Route::get('/state/{id}', function ($id) {
 });
 
 Route::get('/all-postcode', function () {
-    $data = Postcode::all();
+    $data = Postcode::with('states')->get();
     return $data;
 });
 
