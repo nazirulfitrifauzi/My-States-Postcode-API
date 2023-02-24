@@ -21,6 +21,7 @@ Route::get('/all-state', [StatePostcodeController::class, 'allState']);
 Route::get('/state/{id}', [StatePostcodeController::class, 'stateById']);
 Route::get('/all-postcode', [StatePostcodeController::class, 'allPostcode']);
 Route::get('/state-postcode/{id}', [StatePostcodeController::class, 'postcodeByState']);
+Route::get('/postcode/{id}', [StatePostcodeController::class, 'postcodeById']);
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
