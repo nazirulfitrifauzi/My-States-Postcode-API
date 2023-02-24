@@ -46,7 +46,7 @@ class StatePostcodeController extends Controller
 
     public function postcodeById($id)
     {
-        $data = Postcode::find($id);
+        $data = Postcode::with('states')->whereId($id);
 
         return $this->successResponse("Successfully fetched ", [
             'data' => $data,
