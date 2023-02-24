@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\StatePostcodeController;
 use App\Models\Postcode;
 use App\Models\State;
 use Illuminate\Http\Request;
@@ -16,25 +17,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/all-state', function () {
-    $data = State::all();
-    return $data;
-});
-
-Route::get('/state/{id}', function ($id) {
-    $data = State::find($id);
-    return $data;
-});
-
-Route::get('/all-postcode', function () {
-    $data = Postcode::with('states')->get();
-    return $data;
-});
-
-Route::get('/state-postcode/{id}', function ($id) {
-    $data = Postcode::with('states')->where('state_id',$id)->get();
-    return $data;
-});
+Route::get('/all-state', [StatePostcodeController::class, 'allState']);
+Route::get('/state/{id}', [StatePostcodeController::class, 'stateById']);
+Route::get('/all-postcode', [StatePostcodeController::class, 'allPostcode']);
+Route::get('/state-postcode/{id}', [StatePostcodeController::class, 'postcodeByState']);
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
