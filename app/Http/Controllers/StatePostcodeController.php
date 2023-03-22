@@ -5,12 +5,15 @@ namespace App\Http\Controllers;
 use App\Models\Postcode;
 use App\Models\State;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 
 class StatePostcodeController extends Controller
 {
     public function allState()
     {
-        $data = State::all();
+        $data = Cache::rememberForever('all_states', function () {
+            return State::all();
+        });
 
         return $this->successResponse("Successfully fetched ", [
             'data' => $data,
@@ -19,7 +22,9 @@ class StatePostcodeController extends Controller
 
     public function stateById($id)
     {
-        $data = State::find($id);
+        $data = Cache::rememberForever("state_{$id}", function () use ($id) {
+            return State::find($id);
+        });
 
         return $this->successResponse("Successfully fetched ", [
             'data' => $data,
@@ -28,7 +33,9 @@ class StatePostcodeController extends Controller
 
     public function allPostcode()
     {
-        $data = Postcode::with('states')->get();
+        $data = Cache::rememberForever('all_postcodes', function () {
+            return Postcode::with('states')->get();
+        });
 
         return $this->successResponse("Successfully fetched ", [
             'data' => $data,
@@ -37,7 +44,9 @@ class StatePostcodeController extends Controller
 
     public function postcodeByState($id)
     {
-        $data = Postcode::with('states')->where('state_id', $id)->get();
+        $data = Cache::rememberForever("postcodes_by_state_{$id}", function () use ($id) {
+            return Postcode::with('states')->where('state_id', $id)->get();
+        });
 
         return $this->successResponse("Successfully fetched ", [
             'data' => $data,
@@ -46,7 +55,9 @@ class StatePostcodeController extends Controller
 
     public function postcodeById($id)
     {
-        $data = Postcode::with('states')->find($id);
+        $data = Cache::rememberForever("postcode_{$id}", function () use ($id) {
+            return Postcode::with('states')->find($id);
+        });
 
         return $this->successResponse("Successfully fetched ", [
             'data' => $data,
